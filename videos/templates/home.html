@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Video Categories</h1>
+<ul>
+    {% for category in categories %}
+    <a href="{% url 'video_category_detail' slug=category.slug %}"><li>{{ category.title }}</li></a>
+    {% empty %}
+    <li>No categories yet.</li>
+    {% endfor %}
+</ul>
+
+<form action="{% url 'home' %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% for field in form %}
+    <div class="fieldWrapper">
+        {{ field.errors }}
+        {{ field.label_tag }} {{ field }}
+        {% if field.help_text %}
+            <p class="help">{{ field.help_text|safe }}</p>
+        {% endif %}
+    </div>
+    {% endfor %}
+    <p><input type="submit" value="Upload"/></p>
+</form>
+{% endblock %}
+

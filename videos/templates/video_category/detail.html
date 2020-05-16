@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block title %}<h1>{{ category.title }}</h1>{% endblock %}
+
+{% block content %}
+<p>{{ category.description }}</p>
+{% for video in category.videos.all %}
+	<a href="{% url 'video_detail' slug=video.slug %}"><li>{{ video.title }}</li></a>
+{% empty %}
+    <li>No videos yet.</li>
+{% endfor %}
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load ratings %}
+
+{% block title %}<h1>{{ video.title }}</h1>{% endblock %}
+
+{% block content %}
+<p>{{ video.description }}</p>
+{% if video.video %}
+<tr>
+    <td>
+        <video width="640" height="480" controls>
+            <source src="{{ video.video.url }}" type="video/mp4">
+            <source src="{{ video.video.url }}" type="video/ogg">
+            <source src="{{ video.video.url }}" type="video/3gpp">
+            Your browser does not support the video tag.
+        </video>
+    </td>
+</tr>
+{% endif %}
+<p>{{ video.tags }}</p>
+{% for category in categories %}
+	<a href="{% url 'video_category_detail' slug=category.slug %}"><li>{{ category.title }}</li></a>
+{% empty %}
+    <li>No categories yet.</li>
+{% endfor %}
+<p>{{ video.added_date }}</p>
+<p>{{ video.rating.get_rating }}</p>
+{% rating_by_request request on instance.field as vote %}
+<form id="rate" name="rate" method="get" onSubmit="return rate();">
+    {% csrf_token %}
+    <input id="object_id" type="hidden" name="object_id" value="{{ video.id }}"/>
+    <label for="score">Rate: </label>
+    <input id="score" type="number" name="score" maxlength="2" required />
+    <input type="submit" value="Rate">
+</form>
+<script type=text/javascript>
+function rate() {
+  var object_id = document.getElementById('object_id').value
+  var score = document.getElementById('score').value
+  {# document.getElementById('rate').action="{% url 'rate_video' object_id=object_id score=score%} #}
+}
+</script>
+{% endblock %}
